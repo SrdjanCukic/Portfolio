@@ -1,63 +1,67 @@
-import { FaExternalLinkAlt } from "react-icons/fa";
+type ProjectCardProps = {
+	image: string;
+	title: string;
+	description: string;
+	tag: string[];
+	buttonHref: string;
+	buttonText: string;
+};
 
 export default function ProjectCard({
-  title,
-  tag,
-  image,
-  description,
-  buttonText,
-  buttonHref,
-}: Readonly<{
-  title: string;
-  tag: Array<string>;
-  image: string;
-  description: string;
-  buttonText: string;
-  buttonHref: string;
-}>) {
-  return (
-    <>
-      <div
-        className="relative flex flex-col gap-8 overflow-hidden border-transparent rounded-xl border px-8 py-4 bg-[#1E2A47] shadow-lg"
-        style={{
-          padding: "1rem",
-          boxShadow: "0 10px 20px rgba(0, 0, 0, 0.5)", // Adds elevation
-        }}
-      >
-        <div aria-hidden="true" className="absolute inset-0 z-[-1]">
-          <div className="absolute inset-0 bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700"></div>
-          <div className="absolute inset-0 bg-black/10"></div>
-        </div>
+	image,
+	title,
+	description,
+	tag,
+	buttonHref,
+	buttonText,
+}: ProjectCardProps) {
+	return (
+		<div className="flex flex-col rounded-xl bg-[#1E2A47]/80 shadow-lg overflow-hidden border border-[#56d2c6]/30 max-w-md w-full">
+			{/* Slika */}
+			<div className="w-full h-48 overflow-hidden">
+				<img
+					src={image}
+					alt={title}
+					className="w-full h-full object-cover"
+				/>
+			</div>
 
-        <div className="z-20 flex flex-col flex-grow">
-          <div className="flex items-center gap-2 flex-col">
-            <h3 className="inline font-semibold text-white text-xl">{title}</h3>
-            <div className="flex flex-wrap items-center gap-2">
-              {tag.map((t, index) => (
-                <p
-                  key={index}
-                  className="ml-2 inline rounded-xl border border-white p-2 align-top font-medium text-sm uppercase tracking-tight text-[#56d2c6]"
-                >
-                  {t}
-                </p>
-              ))}
-            </div>
-          </div>
-          <img
-            src={image}
-            alt={title}
-            className="mt-4 rounded-lg shadow-md object-cover w-full h-48"
-          />
-          <p className="pt-5 text-neutral-400 ">{description}</p>
-        </div>
-        <button
-          onClick={() => window.open(buttonHref, "_blank")}
-          className="flex items-center justify-center px-6 py-3 text-[#56d2c6] font-bold rounded-full shadow-lg hover:shadow-[0_0_20px_rgba(86,210,198,0.8)] transition-all duration-300 border-[#56d2c6] border-2 mt-4 bg-transparent mx-auto"
-        >
-          <span className="mr-2">{buttonText}</span>
-          <FaExternalLinkAlt className="text-[#56d2c6]" />
-        </button>
-      </div>
-    </>
-  );
+			{/* Tekst */}
+			<div className="flex flex-col flex-grow p-6">
+				{/* Tagovi */}
+				<div className="flex flex-wrap gap-2 mb-3">
+					{tag.map((t, idx) => (
+						<span
+							key={idx}
+							className="px-2 py-1 text-xs font-medium bg-[#56d2c6]/20 text-[#56d2c6] rounded-lg"
+						>
+							{t}
+						</span>
+					))}
+				</div>
+
+				{/* Naslov */}
+				<h2 className="text-xl font-semibold text-[#56d2c6] mb-3">
+					{title}
+				</h2>
+
+				{/* Opis */}
+				<p className="text-sm text-neutral-300 flex-grow">
+					{description}
+				</p>
+
+				{/* Dugme */}
+				<div className="mt-auto mx-auto pt-4">
+					<a
+						href={buttonHref}
+						target="_blank"
+						rel="noopener noreferrer"
+						className="inline-block px-4 py-2 rounded-lg bg-[#56d2c6] text-[#0d1b2a] font-semibold hover:bg-[#48b9ae] transition"
+					>
+						{buttonText}
+					</a>
+				</div>
+			</div>
+		</div>
+	);
 }
