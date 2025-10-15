@@ -1,8 +1,13 @@
 import { FaDownload } from "react-icons/fa";
 import CV from "../data/Frontend_Resume.pdf";
-import boxImg from "../data/Img/box.webp";
+import boxImg from "../data/Img/box.png";
 
 function Hero() {
+	const scrollToSection = (sectionId: string) => {
+		const section = document.getElementById(sectionId);
+		section?.scrollIntoView({ behavior: "smooth" });
+	};
+
 	return (
 		<div
 			className="container mx-auto py-20 px-4 min-h-screen justify-center flex flex-col items-center"
@@ -33,22 +38,35 @@ function Hero() {
 					</h1>
 				</div>
 				<div className="ml-10 md:ml-20 animate-fade-in-up delay-400 hidden lg:block">
-					{" "}
 					<img
 						src={boxImg}
 						alt="Box"
-						className="w-40 h-40 object-contain mx-auto"
+						className=" w-40 h-40 object-contain mx-auto"
 					/>
 				</div>
 			</div>
-			<a
-				href={CV}
-				download
-				className="flex items-center cursor-pointer justify-center px-6 py-3 text-textc-primary font-bold rounded-full shadow-lg hover:shadow-[0_0_20px_rgba(86,210,198,0.8)] transition-all duration-300 border-textc-primary border-2 mt-20 bg-transparent"
-			>
-				<span className="mr-2">Download CV</span>
-				<FaDownload className="text-textc-primary" />
-			</a>
+			<div className="flex flex-wrap justify-center gap-4 mt-20">
+				<a
+					href={CV}
+					download
+					className="flex items-center cursor-pointer justify-center px-6 py-3 text-textc-primary font-bold rounded-full shadow-lg hover:shadow-[0_0_20px_rgba(86,210,198,0.8)] transition-all duration-300 border-textc-primary border-2 bg-transparent"
+				>
+					<span className="mr-2">Download CV</span>
+					<FaDownload className="text-textc-primary" />
+				</a>
+				<button
+					onClick={() => scrollToSection("projects")}
+					className="flex items-center cursor-pointer justify-center px-6 py-3 text-textc-primary font-bold rounded-full shadow-lg hover:shadow-[0_0_20px_rgba(86,210,198,0.8)] transition-all duration-300 border-textc-primary border-2 bg-transparent"
+				>
+					Check Portfolio
+				</button>
+				<button
+					onClick={() => scrollToSection("contact")}
+					className="flex items-center cursor-pointer justify-center px-6 py-3 text-textc-primary font-bold rounded-full shadow-lg hover:shadow-[0_0_20px_rgba(86,210,198,0.8)] transition-all duration-300 border-textc-primary border-2 bg-transparent"
+				>
+					Get in Touch
+				</button>
+			</div>
 		</div>
 	);
 }
