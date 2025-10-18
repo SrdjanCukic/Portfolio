@@ -98,8 +98,14 @@ export default function ProjectCard({
 			</div>
 
 			{isOpen && (
-				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6">
-					<div className="max-w-2xl rounded-2xl bg-[#1E2A47] p-6 shadow-xl">
+				<div
+					className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6"
+					onClick={() => setIsOpen(false)}
+				>
+					<div
+						className="max-w-2xl rounded-2xl bg-[#1E2A47] p-6 shadow-xl"
+						onClick={(e) => e.stopPropagation()}
+					>
 						<h2 className="text-2xl font-semibold text-[#56d2c6] mb-4">
 							{title}
 						</h2>
