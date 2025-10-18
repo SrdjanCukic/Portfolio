@@ -1,10 +1,12 @@
+import { useState } from "react";
+
 type ProjectCardProps = {
 	image: string;
 	title: string;
 	description: string;
 	tag: string[];
-	buttonHref: string;
-	buttonText: string;
+	codeHref?: string;
+	liveHref?: string;
 };
 
 export default function ProjectCard({
@@ -12,23 +14,24 @@ export default function ProjectCard({
 	title,
 	description,
 	tag,
-	buttonHref,
-	buttonText,
+	codeHref,
+	liveHref,
 }: ProjectCardProps) {
+	const [isOpen, setIsOpen] = useState(false);
+
 	return (
-		<div className="flex flex-col rounded-xl bg-[#1E2A47]/80 shadow-lg overflow-hidden border border-[#56d2c6]/30 max-w-md w-full">
-			{/* Slika */}
-			<div className="w-full h-48 overflow-hidden">
-				<img
-					src={image}
-					alt={title}
-					className="w-full h-full object-cover"
-				/>
+		<div className="flex flex-col rounded-2xl bg-[#1E2A47]/85 shadow-lg overflow-hidden border border-[#56d2c6]/30 max-w-md w-full">
+			<div className="px-6 pt-6">
+				<div className="relative rounded-2xl overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.35)]">
+					<img
+						src={image}
+						alt={title}
+						className="w-full h-44 object-cover"
+					/>
+				</div>
 			</div>
 
-			{/* Tekst */}
 			<div className="flex flex-col flex-grow p-6">
-				{/* Tagovi */}
 				<div className="flex flex-wrap gap-2 mb-3">
 					{tag.map((t, idx) => (
 						<span
@@ -40,28 +43,84 @@ export default function ProjectCard({
 					))}
 				</div>
 
-				{/* Naslov */}
 				<h2 className="text-xl font-semibold text-[#56d2c6] mb-3">
 					{title}
 				</h2>
 
-				{/* Opis */}
-				<p className="text-sm text-neutral-300 flex-grow">
-					{description}
-				</p>
-
-				{/* Dugme */}
-				<div className="mt-auto mx-auto pt-4">
-					<a
-						href={buttonHref}
-						target="_blank"
-						rel="noopener noreferrer"
-						className="inline-block px-4 py-2 rounded-lg bg-[#56d2c6] text-[#0d1b2a] font-semibold hover:bg-[#48b9ae] transition"
+				<div className="flex flex-col flex-grow gap-2">
+					<p className="text-sm text-neutral-300 leading-relaxed line-clamp-4">
+						{description}
+					</p>
+					<button
+						onClick={() => setIsOpen(true)}
+						className="mt-auto self-start text-textc-primary text-xs font-semibold uppercase tracking-wide transition-colors duration-300 hover:text-[#48b9ae] hover:underline"
 					>
-						{buttonText}
-					</a>
+						Read more
+					</button>
+				</div>
+
+				<div className="mt-auto flex w-full items-center justify-between gap-4 pt-6">
+					{codeHref && (
+						<a
+							href={codeHref}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="flex items-center justify-center gap-2 px-4 py-2 text-textc-primary font-semibold rounded-full shadow-lg hover:shadow-[0_0_16px_rgba(86,210,198,0.75)] transition-all duration-300 border-2 border-textc-primary bg-transparent text-sm uppercase tracking-wide"
+							aria-label={`Pogledaj kod projekta ${title}`}
+						>
+							<span
+								aria-hidden
+								className="text-base font-semibold"
+							>
+								{"</>"}
+							</span>
+							Code
+						</a>
+					)}
+					{liveHref && (
+						<a
+							href={liveHref}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="flex items-center justify-center gap-2 px-4 py-2 text-textc-primary font-semibold rounded-full shadow-lg hover:shadow-[0_0_16px_rgba(86,210,198,0.75)] transition-all duration-300 border-2 border-textc-primary bg-transparent text-sm uppercase tracking-wide"
+							aria-label={`Otvori live verziju projekta ${title}`}
+						>
+							<span
+								aria-hidden
+								className="text-base font-semibold"
+							>
+								{"↗"}
+							</span>
+							Live
+						</a>
+					)}
 				</div>
 			</div>
+
+			{isOpen && (
+				<div
+					className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-6"
+					onClick={() => setIsOpen(false)}
+				>
+					<div
+						className="max-w-2xl rounded-2xl bg-[#1E2A47] p-6 shadow-xl"
+						onClick={(e) => e.stopPropagation()}
+					>
+						<h2 className="text-2xl font-semibold text-[#56d2c6] mb-4">
+							{title}
+						</h2>
+						<p className="text-base text-neutral-200 leading-relaxed">
+							{description}
+						</p>
+						<button
+							onClick={() => setIsOpen(false)}
+							className="mt-6 flex items-center justify-center gap-2 px-4 py-2 text-textc-primary font-semibold rounded-full border-2 border-textc-primary"
+						>
+							Close
+						</button>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface HeaderProps {
 	currentSection: string;
@@ -6,13 +6,26 @@ interface HeaderProps {
 
 const NAV_ITEMS = [
 	{ id: "hero", label: "Home" },
-	{ id: "about", label: "About" },
+	{ id: "skills", label: "Skills" },
 	{ id: "projects", label: "Projects" },
 	{ id: "contact", label: "Contact" },
 ];
 
 const Header: React.FC<HeaderProps> = ({ currentSection }) => {
 	const [open, setOpen] = useState<boolean>(false);
+	const [isHovered, setIsHovered] = useState<boolean>(false);
+	const [isAtTop, setIsAtTop] = useState<boolean>(true);
+
+	useEffect(() => {
+		const handleScrollState = () => {
+			setIsAtTop(window.scrollY <= 10);
+		};
+
+		handleScrollState();
+		window.addEventListener("scroll", handleScrollState);
+
+		return () => window.removeEventListener("scroll", handleScrollState);
+	}, []);
 
 	const handleScroll = (id: string) => {
 		const el = document.getElementById(id);
@@ -28,26 +41,39 @@ const Header: React.FC<HeaderProps> = ({ currentSection }) => {
 		setOpen(false);
 	};
 
+	const shouldExpand = isAtTop || isHovered;
 	const navLinkClass = (isActive: boolean) =>
-		`relative px-2 py-2 transition-all duration-300 cursor-pointer
-     hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
-     focus-visible:ring-offset-2 focus-visible:ring-offset-brand
-     after:absolute after:left-0 after:-bottom-0.5 after:h-0.5 after:w-0 after:bg-primary after:transition-all
-     ${
-			isActive
-				? "text-primary after:w-full"
-				: "text-textc-secondary hover:after:w-full"
-		}`;
+		`relative px-2 transition-all duration-300 cursor-pointer ${
+			shouldExpand ? "py-2 text-base" : "py-1 text-sm"
+		}
+         hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
+         focus-visible:ring-offset-2 focus-visible:ring-offset-brand
+         after:absolute after:left-0 after:-bottom-0.5 after:h-0.5 after:w-0 after:bg-primary after:transition-all
+         ${
+				isActive
+					? "text-primary after:w-full"
+					: "text-textc-secondary hover:after:w-full"
+			}`;
 
 	return (
-		<header className="top-0 w-full bg-brand-surface text-textc-secondary py-4 fixed z-50 shadow-lg">
-			<div className="container mx-auto flex justify-between items-center px-4">
+		<header
+			onMouseEnter={() => setIsHovered(true)}
+			onMouseLeave={() => setIsHovered(false)}
+			className={`top-0 w-full fixed z-50 bg-brand-surface text-textc-secondary transition-all duration-300 ${
+				shouldExpand
+					? "py-4 shadow-lg"
+					: "py-2 shadow-md backdrop-blur-md"
+			}`}
+		>
+			<div className="container mx-auto flex justify-between items-center px-4 transition-all duration-300">
 				{/* Logo (scroll to top) */}
 				<button
 					onClick={() => handleScroll("hero")}
-					className="font-bold text-2xl text-primary tracking-wide cursor-pointer
+					className={`font-bold text-primary tracking-wide cursor-pointer transition-all duration-300 ${
+						shouldExpand ? "text-2xl" : "text-xl"
+					}
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary
-                     focus-visible:ring-offset-2 focus-visible:ring-offset-brand"
+                     focus-visible:ring-offset-2 focus-visible:ring-offset-brand`}
 					aria-label="Scroll to top"
 				>
 					Srđan Čukić
@@ -55,7 +81,9 @@ const Header: React.FC<HeaderProps> = ({ currentSection }) => {
 
 				{/* Desktop Navigation */}
 				<nav
-					className="hidden md:flex items-center space-x-6"
+					className={`hidden md:flex items-center transition-all duration-300 ${
+						shouldExpand ? "space-x-6" : "space-x-4"
+					}`}
 					aria-label="Main navigation"
 				>
 					{NAV_ITEMS.map((item) => (
@@ -107,9 +135,11 @@ const Header: React.FC<HeaderProps> = ({ currentSection }) => {
 			{/* Mobile Menu */}
 			<div
 				id="mobile-menu"
-				className={`absolute top-16 right-0 bg-brand-surface w-full md:hidden transition-transform duration-300 ${
+				className={`absolute right-0 w-full md:hidden transition-transform duration-300 ${
 					open ? "translate-x-0" : "translate-x-full"
-				} shadow-lg rounded-b-lg`}
+				} ${
+					shouldExpand ? "top-16" : "top-12"
+				} bg-brand-surface shadow-lg rounded-b-lg`}
 			>
 				<nav
 					className="flex flex-col items-center space-y-4 py-4"

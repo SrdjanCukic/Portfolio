@@ -20,16 +20,16 @@ function Projects() {
 			</h1>
 
 			<div className="flex justify-center items-center min-h-[50vh]">
-				<div className="grid grid-cols-1 sm:grid-cols-3 gap-8 items-stretch">
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
 					{projects.map((project, index) => (
 						<ProjectCard
 							key={index}
 							image={project.image}
-							buttonHref={project.embedUrl}
-							buttonText="Check it out"
 							description={project.description}
 							tag={project.technologies}
 							title={project.title}
+							codeHref={project.codeHref}
+							liveHref={project.liveHref}
 						/>
 					))}
 					<ComingSoonCard />
